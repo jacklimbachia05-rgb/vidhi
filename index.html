@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Crispello Forever ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #20002c, #cbb4d4);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+.section {
+    display: none;
+    padding: 40px 20px;
+}
+
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.yesBtn {
+    background: #ff4081;
+    color: white;
+}
+
+.noBtn {
+    background: white;
+    color: black;
+}
+
+/* Floating Nickname Background */
+.nameFloat {
+    position: fixed;
+    color: rgba(255,255,255,0.08);
+    font-size: 28px;
+    animation: floatName 12s linear infinite;
+    white-space: nowrap;
+}
+
+@keyframes floatName {
+    0% { transform: translateY(100vh); }
+    100% { transform: translateY(-10vh); }
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="section" id="page1" style="display:block;">
+    <h1>My Crispello Forever ❤️</h1>
+    <p>Ready for a small love game?</p>
+    <button onclick="nextPage(2)">Start 💖</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="section" id="page2">
+    <h2>Who loves more? 😌</h2>
+    <button onclick="nextPage(3)">You ❤️</button>
+    <button onclick="nextPage(3)">Me 😎</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="section" id="page3">
+    <h2>If I was chocolate, what would you do? 🍫</h2>
+    <button onclick="nextPage(4)">Eat you 😋</button>
+    <button onclick="nextPage(4)">Keep forever 🥰</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="section" id="page4">
+    <h2>Do you love me? 💍</h2>
+    <button class="yesBtn" id="yesBtn" onclick="moveYes()">Yes ❤️</button>
+    <button class="noBtn" onclick="removeNo(this)">No 🙈</button>
+</div>
+
+<!-- FINAL PAGE -->
+<div class="section" id="final">
+    <h1>Happy Valentine’s Day ❤️</h1>
+    <h2>Forever Together 💖</h2>
+    <p id="finalMessage" style="margin-top:20px; font-size:18px;"></p>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+
+let moveCount = 0;
+
+/* Page Switch */
+function nextPage(pageNumber) {
+    document.querySelectorAll(".section").forEach(s => s.style.display="none");
+    document.getElementById("page"+pageNumber).style.display="block";
+}
+
+/* Remove NO button */
+function removeNo(btn) {
+    btn.style.display = "none";
+}
+
+/* Move YES button 5 times */
+function moveYes() {
+    let btn = document.getElementById("yesBtn");
+    moveCount++;
+
+    if(moveCount < 5) {
+        btn.style.position = "absolute";
+        btn.style.top = Math.random() * 80 + "%";
+        btn.style.left = Math.random() * 80 + "%";
+    } else {
+        document.getElementById("page4").style.display="none";
+        document.getElementById("final").style.display="block";
+        startHeartExplosion();
+    }
+}
+
+/* Floating Nickname Background */
+setInterval(() => {
+    let name = document.createElement("div");
+    name.className = "nameFloat";
+    name.innerHTML = "My Crispello Forever ❤️";
+    name.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(name);
+
+    setTimeout(() => {
+        name.remove();
+    }, 12000);
+}, 2000);
+
+/* Heart Explosion Celebration */
+function startHeartExplosion() {
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function createParticle(x,y) {
+        for(let i=0;i<150;i++){
+            particles.push({
+                x:x,
+                y:y,
+                speedX:(Math.random()-0.5)*8,
+                speedY:(Math.random()-0.5)*8,
+                life:100
+            });
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        particles.forEach((p,index)=>{
+            p.x+=p.speedX;
+            p.y+=p.speedY;
+            p.life--;
+            ctx.font="20px Arial";
+            ctx.fillText("❤️",p.x,p.y);
+
+            if(p.life<=0){
+                particles.splice(index,1);
+            }
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    createParticle(canvas.width/2, canvas.height/2);
+    animate();
+
+    setTimeout(() => {
+        document.getElementById("finalMessage").innerHTML =
+        "My Crispello Forever… ❤️<br><br>" +
+        "No matter where we are,<br>" +
+        "no matter how crazy life gets…<br><br>" +
+        "I will still choose you.<br>" +
+        "Again. And again. And again. 💖<br><br>" +
+        "When your heart calms down…<br>" +
+        "Send me just one word:<br><br>" +
+        "<b>Forever</b> 💍<br><br>" +
+        "— Made only for you ❤️";
+    }, 3000);
+}
+
+</script>
+
+</body>
+</html>
